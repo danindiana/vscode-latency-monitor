@@ -62,7 +62,7 @@ gh repo create vscode-latency-monitor --public --description "High-performance V
 ### 2. Connect Local Repository
 ```bash
 # Add GitHub as remote origin
-git remote add origin https://github.com/YOUR_USERNAME/vscode-latency-monitor.git
+✅ Ready for: git remote add origin https://github.com/danindiana/vscode-latency-monitor.git
 
 # Verify remote
 git remote -v
