@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Core Monitoring System**: High-performance latency monitoring for VS Code, terminal, and model interactions
 - **Dual Web Interface**: Interactive dashboard (port 3030) and REST API telemetry service (port 8081)
+- **Enhanced Wall Notification System v3.0**: Integrated Python-based system monitoring (port 8888)
 - **LAN Network Integration**: Full cross-network accessibility with automatic IP detection
 - **SQLite Database**: Persistent storage with microsecond precision timestamps
 - **Comprehensive CLI**: 9 commands for complete system control and management
@@ -17,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Component Testing**: Configurable test suite for system validation
 - **Health Monitoring**: Built-in health checks and status reporting endpoints
 - **Research Framework**: Comprehensive SQL-Rust integration research documentation
+- **SQLx Integration Guide**: 322-line production-ready reference for high-performance monitoring applications
 
 ### Technical Features
 - **Microsecond Timing**: Precision performance measurement with µs accuracy
@@ -49,7 +51,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **README.md**: Comprehensive project documentation with examples
 - **LAN_NETWORK_CONFIG.md**: Complete network service configuration guide
 - **SQL_RUST_INTEGRATION_RESEARCH.md**: Research framework for Perplexity AI
-- **LICENSE**: MIT License for open source distribution
+- **SQLX_RUST_INTEGRATION_GUIDE.md**: Production-ready reference for SQLx & Rust integration
+- **PROJECT_SUCCESS_LOG.md**: Comprehensive achievement documentation from NTP integration to production
+- **WALL_SYSTEM_UPDATE.md**: Enhanced Wall Notification System evolution documentation
+- **system-notifications/README.md**: Integration documentation for wall notification system
+- **LICENSE**: MIT License with Calisota.ai attribution for open source distribution
 
 ### Fixed
 - **sysinfo API Compatibility**: Updated to sysinfo 0.30+ without deprecated traits
