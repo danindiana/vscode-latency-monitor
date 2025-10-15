@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Code Latency Monitor</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .card h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-active {
+            background-color: #00ff88;
+            box-shadow: 0 0 10px #00ff88;
+        }
+
+        .status-inactive {
+            background-color: #ff4444;
+            box-shadow: 0 0 10px #ff4444;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .events-table th,
+        .events-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .events-table th {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            font-weight: 600;
+        }
+
+        .events-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .component-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .component-vscode {
+            background: #007acc;
+        }
+
+        .component-copilot {
+            background: #ff6b35;
+        }
+
+        .component-terminal {
+            background: #2ecc71;
+        }
+
+        .component-model {
+            background: #9b59b6;
+        }
+
+        .refresh-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.7;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .loading {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="refresh-indicator" id="refreshIndicator">
+        🔄 Auto-refresh: ON
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🚀 VS Code Latency Monitor</h1>
+            <p class="subtitle">Real-time performance monitoring for VS Code, AI models, and system components</p>
+            <p><span id="lastUpdate">Loading...</span></p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h3>📊 System Status</h3>
+                <div id="systemStatus" class="loading">Loading system status...</div>
+            </div>
+
+            <div class="card">
+                <h3>⚡ Performance Overview</h3>
+                <div id="performanceOverview" class="loading">Loading performance data...</div>
+            </div>
+
+            <div class="card">
+                <h3>🤖 Active Monitors</h3>
+                <div id="activeMonitors" class="loading">Loading monitor status...</div>
+            </div>
+
+            <div class="card">
+                <h3>📈 Latency Trends</h3>
+                <div class="chart-container">
+                    <canvas id="latencyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📋 Recent Events</h3>
+            <div id="recentEvents" class="loading">Loading recent events...</div>
+        </div>
+    </div>
+
+    <script>
+        let latencyChart;
+        let refreshInterval;
+
+        // Initialize the dashboard
+        async function initDashboard() {
+            await loadSystemStatus();
+            await loadRecentEvents();
+            initLatencyChart();
+            
+            // Set up auto-refresh
+            refreshInterval = setInterval(refreshDashboard, 2000);
+            
+            document.getElementById('lastUpdate').textContent = 
+                `Last updated: ${new Date().toLocaleTimeString()}`;
+        }
+
+        // Load system status
+        async function loadSystemStatus() {
+            try {
+                const response = await fetch('/api/status');
+                const status = await response.json();
+                
+                const statusHtml = `
+                    <div class="metric">
+                        <span class="metric-label">Total Events</span>
+                        <span class="metric-value">${status.total_events.toLocaleString()}</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Memory Usage</span>
+                        <span class="metric-value">${status.memory_usage_mb} MB</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CPU Usage</span>
+                        <span class="metric-value">${status.cpu_usage_percent.toFixed(1)}%</span>
+                    </div>
+                `;
+                
+                document.getElementById('systemStatus').innerHTML = statusHtml;
+
+                // Update active monitors
+                const monitorsHtml = status.active_monitors.map(monitor => `
+                    <div class="metric">
+                        <span class="metric-label">
+                            <span class="status-indicator status-active"></span>
+                            ${monitor}
+                        </span>
+                        <span class="metric-value">ACTIVE</span>
+                    </div>
+                `).join('');
+                
+                document.getElementById('activeMonitors').innerHTML = monitorsHtml;
+
+                // Update performance overview
+                if (status.performance_metrics && status.performance_metrics.length > 0) {
+                    const perfHtml = status.performance_metrics.map(metric => `
+                        <div class="metric">
+                            <span class="metric-label">${metric.component}</span>
+                            <span class="metric-value">${metric.avg_duration_ms.toFixed(2)}ms avg</span>
+                        </div>
+                    `).join('');
+                    
+                    document.getElementById('performanceOverview').innerHTML = perfHtml;
+                }
+
+            } catch (error) {
+                console.error('Failed to load system status:', error);
+                document.getElementById('systemStatus').innerHTML = 
+                    '<div style="color: #ff4444;">Error loading system status</div>';
+            }
+        }
+
+        // Load recent events
+        async function loadRecentEvents() {
+            try {
+                const response = await fetch('/api/events');
+                const events = await response.json();
+                
+                if (events.length === 0) {
+                    document.getElementById('recentEvents').innerHTML = 
+                        '<p style="text-align: center; opacity: 0.7;">No recent events</p>';
+                    return;
+                }
+
+                const tableHtml = `
+                    <table class="events-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Component</th>
+                                <th>Duration</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${events.map(event => `
+                                <tr>
+                                    <td>${new Date(event.timestamp).toLocaleTimeString()}</td>
+                                    <td><span class="component-tag component-${event.component_type.toLowerCase()}">${event.component_type}</span></td>
+                                    <td>${event.duration ? (event.duration.secs * 1000 + Math.floor(event.duration.nanos / 1000000)) : 'N/A'}ms</td>
+                                    <td>${event.description}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                
+                document.getElementById('recentEvents').innerHTML = tableHtml;
+
+            } catch (error) {
+                console.error('Failed to load recent events:', error);
+                document.getElementById('recentEvents').innerHTML = 
+                    '<div style="color: #ff4444;">Error loading events</div>';
+            }
+        }
+
+        // Initialize latency chart
+        function initLatencyChart() {
+            const ctx = document.getElementById('latencyChart').getContext('2d');
+            
+            latencyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'VS Code',
+                        data: [],
+                        borderColor: '#007acc',
+                        backgroundColor: 'rgba(0, 122, 204, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Copilot',
+                        data: [],
+                        borderColor: '#ff6b35',
+                        backgroundColor: 'rgba(255, 107, 53, 0.1)',
+                        tension: 0.4
+                    }, {
+                        label: 'Terminal',
+                        data: [],
+                        borderColor: '#2ecc71',
+                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#ffffff'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Latency (ms)',
+                                color: '#ffffff'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Refresh dashboard data
+        async function refreshDashboard() {
+            await loadSystemStatus();
+            await loadRecentEvents();
+            
+            document.getElementById('lastUpdate').textContent = 
+                `Last updated: ${new Date().toLocaleTimeString()}`;
+        }
+
+        // Initialize dashboard when page loads
+        window.addEventListener('load', initDashboard);
+
+        // Handle visibility change to pause/resume refresh
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                clearInterval(refreshInterval);
+                document.getElementById('refreshIndicator').textContent = '⏸️ Auto-refresh: PAUSED';
+            } else {
+                refreshInterval = setInterval(refreshDashboard, 2000);
+                document.getElementById('refreshIndicator').textContent = '🔄 Auto-refresh: ON';
+                refreshDashboard();
+            }
+        });
+    </script>
+</body>
+</html>
