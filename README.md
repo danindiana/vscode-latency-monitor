@@ -118,6 +118,43 @@ src/
 ├── telemetry.rs     # LAN telemetry API server (port 8081)
 ├── models.rs        # Data structures and types
 └── config.rs        # Configuration management
+
+system-notifications/
+├── server.py        # Enhanced Wall Notification System (port 8888)
+└── README.md        # Integration documentation
+```
+
+### 🏠 Enhanced Wall Notification System Integration
+
+The project includes an integrated **Enhanced Wall Notification System v3.0** that provides complementary system-wide monitoring:
+
+- **🌐 Web Interface**: Real-time system dashboard on port 8888
+- **📊 System Metrics**: CPU, memory, disk usage, and system uptime
+- **🕒 NTP Integration**: Live NTP peer status and time synchronization
+- **🔗 Service Integration**: Direct links to Rust monitoring services
+- **📋 Activity Feed**: Recent wall notifications and system events
+- **🏠 LAN Accessible**: Cross-network monitoring for infrastructure teams
+
+#### Quick Start Wall System
+```bash
+# Start the wall notification server
+cd system-notifications
+python3 server.py
+
+# Access at http://localhost:8888 or http://[LAN_IP]:8888
+```
+
+#### Integrated Monitoring Stack
+```bash
+# Start complete monitoring ecosystem
+cargo run -- dashboard --port 3030 &     # Rust latency dashboard
+cargo run -- telemetry --port 8081 &     # Rust telemetry API
+cd system-notifications && python3 server.py &  # Wall notification system
+
+# Access points:
+# - http://localhost:3030  (Rust Dashboard)
+# - http://localhost:8081  (Rust Telemetry)
+# - http://localhost:8888  (Wall Notifications)
 ```
 
 ### Database Schema
