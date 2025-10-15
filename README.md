@@ -4,8 +4,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![Production Ready](https://img.shields.io/badge/status-production%20ready-brightgreen.svg)]()
+[![Calisota.ai](https://img.shields.io/badge/Calisota.ai-project-blue.svg)](https://calisota.ai)
 
 A high-performance monitoring system for tracking VS Code response times and system performance metrics with LAN-accessible telemetry services. Built with Rust for microsecond precision and minimal overhead.
+
+**Developed by [Calisota.ai](https://calisota.ai) - Advanced AI Development & Research**
 
 ## ✨ Features
 
@@ -278,11 +281,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
+- **Calisota.ai**: Advanced AI development and research organization
 - **Enhanced Wall Notification System**: Original inspiration and foundation
 - **Rust Community**: Amazing ecosystem and crate maintainers
 - **SQLx Team**: Outstanding database integration library
 - **Axum Framework**: Modern async web development
 - **VS Code Team**: Excellent development environment
+- **GitHub Copilot**: AI-powered development assistance
 
 ## 📈 Project Statistics
 
@@ -300,6 +305,8 @@ This project is part of the Enhanced Wall Notification System ecosystem:
 
 ---
 
-**Built with ❤️ using Rust and powered by GitHub Copilot**
+**Built with ❤️ by [Calisota.ai](https://calisota.ai) using Rust and powered by GitHub Copilot**
+
+*A Calisota.ai project - Advancing AI development through high-performance monitoring and research tools.*
 
 *For advanced configuration and research insights, see the comprehensive documentation in the project's research files.*

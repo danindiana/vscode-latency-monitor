@@ -16,7 +16,7 @@ git remote -v
 ### 2. Create GitHub Repository
 Go to **https://github.com/new** and create:
 - **Repository name**: `vscode-latency-monitor`
-- **Description**: `High-performance VS Code latency monitoring system with LAN-accessible telemetry services built in Rust`
+- **Description**: `High-performance VS Code latency monitoring system with LAN-accessible telemetry services built in Rust. A Calisota.ai project.`
 - **Visibility**: Public ✅
 - **Initialize**: Don't initialize (we have existing code) ❌
 
@@ -103,7 +103,7 @@ cargo run -- dashboard --port 3030
 - Component testing framework
 - Security policy and contributing guidelines
 
-Built with ❤️ using Rust and powered by GitHub Copilot
+Built with ❤️ by Calisota.ai using Rust and powered by GitHub Copilot
 ```
 
 ## 🔗 Repository URLs

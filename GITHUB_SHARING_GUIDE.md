@@ -53,7 +53,7 @@ gh repo create vscode-latency-monitor --public --description "High-performance V
 # Option B: Manual creation
 # 1. Go to https://github.com/new
 # 2. Repository name: vscode-latency-monitor
-# 3. Description: High-performance VS Code latency monitoring system with LAN-accessible telemetry services
+# 3. Description: High-performance VS Code latency monitoring system with LAN-accessible telemetry services. A Calisota.ai project.
 # 4. Public repository
 # 5. Don't initialize (we have existing code)
 # 6. Create repository
@@ -89,7 +89,7 @@ git push --tags origin
 
 ### Repository Description
 ```
-High-performance VS Code latency monitoring system with LAN-accessible telemetry services. Built with Rust for microsecond precision and minimal overhead.
+High-performance VS Code latency monitoring system with LAN-accessible telemetry services. Built with Rust for microsecond precision and minimal overhead. A Calisota.ai project.
 ```
 
 ### Topics/Tags
