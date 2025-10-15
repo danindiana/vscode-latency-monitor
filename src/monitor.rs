@@ -1,10 +1,8 @@
 use anyhow::Result;
-use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
 use std::time::{Duration, Instant};
 use tokio::time::sleep;
 use tracing::{debug, info, warn};
-use sysinfo::{System, SystemExt, ProcessExt, Pid};
+use sysinfo::System;
 use crossbeam_channel::{unbounded, Receiver, Sender};
 
 use crate::storage::MetricsStorage;
@@ -64,7 +62,6 @@ impl LatencyMonitor {
                 for (pid, process) in &vscode_processes {
                     let cpu_usage = process.cpu_usage();
                     let memory = process.memory();
-                    let disk_usage = process.disk_usage();
 
                     // Create latency event for process metrics
                     let event = LatencyEvent::new(
@@ -128,7 +125,9 @@ impl LatencyMonitor {
                     .iter()
                     .filter(|(_, proc)| {
                         let name = proc.name().to_lowercase();
-                        let cmd_line = proc.cmd().join(" ").to_lowercase();
+                        let cmd_line = proc.cmd()
+                            .join(" ")
+                            .to_lowercase();
                         
                         name.contains("copilot") || 
                         cmd_line.contains("github.copilot") ||

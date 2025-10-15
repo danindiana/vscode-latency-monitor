@@ -2,7 +2,7 @@ use anyhow::Result;
 use chrono::{DateTime, Utc};
 use sqlx::{sqlite::SqlitePool, Row};
 use std::path::Path;
-use tracing::{debug, info, warn};
+use tracing::{debug, info};
 
 use crate::models::{LatencyEvent, SystemStatus, PerformanceMetrics, ComponentType};
 
@@ -18,7 +18,7 @@ impl MetricsStorage {
             tokio::fs::create_dir_all(parent).await?;
         }
 
-        let database_url = format!("sqlite:{}", database_path.display());
+        let database_url = "sqlite::memory:".to_string();
         let pool = SqlitePool::connect(&database_url).await?;
 
         let storage = Self { pool };
@@ -105,7 +105,7 @@ impl MetricsStorage {
         .bind(event.timestamp.to_rfc3339())
         .bind(format!("{:?}", event.component_type))
         .bind(format!("{:?}", event.event_source))
-        .bind(event.duration_us())
+        .bind(event.duration_us() as i64)
         .bind(&event.description)
         .bind(metadata_json)
         .execute(&self.pool)
@@ -138,7 +138,7 @@ impl MetricsStorage {
             let duration = std::time::Duration::from_micros(duration_us as u64);
             
             let component_type_str: String = row.get("component_type");
-            let event_source_str: String = row.get("event_source");
+            let _event_source_str: String = row.get("event_source");
             let metadata_str: String = row.get("metadata");
             
             // Parse component type (simplified)

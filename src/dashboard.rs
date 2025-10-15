@@ -7,9 +7,8 @@ use axum::{
     Router,
 };
 use serde_json::json;
-use std::sync::Arc;
 use tokio::net::TcpListener;
-use tower_http::{cors::CorsLayer, services::ServeDir};
+use tower_http::cors::CorsLayer;
 use tracing::info;
 
 use crate::config::Config;
