@@ -8,11 +8,13 @@ mod models;
 mod dashboard;
 mod storage;
 mod config;
+mod telemetry;
 
 use monitor::LatencyMonitor;
 use dashboard::DashboardServer;
 use storage::MetricsStorage;
 use config::Config;
+use telemetry::TelemetryServer;
 
 #[derive(Parser)]
 #[command(
@@ -127,6 +129,17 @@ enum Commands {
         #[arg(short, long, default_value = "10")]
         iterations: usize,
     },
+
+    /// Start LAN telemetry server
+    Telemetry {
+        /// Port to serve telemetry API
+        #[arg(short, long, default_value = "8080")]
+        port: u16,
+
+        /// Enable verbose telemetry output
+        #[arg(short, long)]
+        verbose: bool,
+    },
 }
 
 #[tokio::main]
@@ -170,6 +183,10 @@ async fn main() -> Result<()> {
         
         Commands::Test { component, iterations } => {
             run_tests(&config, component, iterations).await?;
+        }
+        
+        Commands::Telemetry { port, verbose } => {
+            start_telemetry(&config, port, verbose).await?;
         }
     }
 
@@ -258,6 +275,22 @@ async fn start_dashboard(config: &Config, port: u16, realtime: bool) -> Result<(
     let dashboard = DashboardServer::new(config.clone(), storage, realtime).await?;
     
     dashboard.serve(port).await?;
+    
+    Ok(())
+}
+
+async fn start_telemetry(config: &Config, port: u16, verbose: bool) -> Result<()> {
+    info!("🛰️ Starting LAN telemetry server on port {}", port);
+    
+    let storage = MetricsStorage::new(&config.storage.database_path).await?;
+    let telemetry_server = TelemetryServer::new(config.clone(), storage).await?;
+    
+    if verbose {
+        info!("Verbose telemetry logging enabled");
+    }
+    
+    info!("🌐 Telemetry server will be accessible across your LAN");
+    telemetry_server.serve(port).await?;
     
     Ok(())
 }

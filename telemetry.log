@@ -1,0 +1,169 @@
+nohup: ignoring input
+warning: fields `config` and `system` are never read
+  --> vscode-latency-monitor-rs/src/monitor.rs:13:5
+   |
+12 | pub struct LatencyMonitor {
+   |            -------------- fields in this struct
+13 |     config: Config,
+   |     ^^^^^^
+...
+17 |     system: System,
+   |     ^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: methods `measure_command_latency` and `stop` are never used
+   --> vscode-latency-monitor-rs/src/monitor.rs:307:18
+    |
+ 21 | impl LatencyMonitor {
+    | ------------------- methods in this implementation
+...
+307 |     pub async fn measure_command_latency<F, Fut, T>(&self, 
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^
+...
+413 |     pub fn stop(&mut self) {
+    |            ^^^^
+
+warning: method `with_metadata` is never used
+  --> vscode-latency-monitor-rs/src/models.rs:35:12
+   |
+17 | impl LatencyEvent {
+   | ----------------- method in this implementation
+...
+35 |     pub fn with_metadata(mut self, metadata: serde_json::Value) -> Self {
+   |            ^^^^^^^^^^^^^
+
+warning: associated function `new` is never used
+   --> vscode-latency-monitor-rs/src/models.rs:119:12
+    |
+118 | impl PerformanceMetrics {
+    | ----------------------- associated function in this implementation
+119 |     pub fn new(component: ComponentType) -> Self {
+    |            ^^^
+
+warning: associated function `new` is never used
+   --> vscode-latency-monitor-rs/src/models.rs:149:12
+    |
+148 | impl SystemStatus {
+    | ----------------- associated function in this implementation
+149 |     pub fn new() -> Self {
+    |            ^^^
+
+warning: struct `TokenMetrics` is never constructed
+   --> vscode-latency-monitor-rs/src/models.rs:164:12
+    |
+164 | pub struct TokenMetrics {
+    |            ^^^^^^^^^^^^
+
+warning: associated function `new` is never used
+   --> vscode-latency-monitor-rs/src/models.rs:175:12
+    |
+174 | impl TokenMetrics {
+    | ----------------- associated function in this implementation
+175 |     pub fn new(
+    |            ^^^
+
+warning: struct `CommandLatency` is never constructed
+   --> vscode-latency-monitor-rs/src/models.rs:201:12
+    |
+201 | pub struct CommandLatency {
+    |            ^^^^^^^^^^^^^^
+
+warning: associated items `new` and `with_resource_usage` are never used
+   --> vscode-latency-monitor-rs/src/models.rs:213:12
+    |
+212 | impl CommandLatency {
+    | ------------------- associated items in this implementation
+213 |     pub fn new(
+    |            ^^^
+...
+233 |     pub fn with_resource_usage(mut self, cpu_percent: f32, memory_kb: u64) -> Self {
+    |            ^^^^^^^^^^^^^^^^^^^
+
+warning: struct `ModelInteraction` is never constructed
+   --> vscode-latency-monitor-rs/src/models.rs:241:12
+    |
+241 | pub struct ModelInteraction {
+    |            ^^^^^^^^^^^^^^^^
+
+warning: enum `ModelInteractionType` is never used
+   --> vscode-latency-monitor-rs/src/models.rs:255:10
+    |
+255 | pub enum ModelInteractionType {
+    |          ^^^^^^^^^^^^^^^^^^^^
+
+warning: associated items `new` and `tokens_per_second` are never used
+   --> vscode-latency-monitor-rs/src/models.rs:278:12
+    |
+277 | impl ModelInteraction {
+    | --------------------- associated items in this implementation
+278 |     pub fn new(
+    |            ^^^
+...
+298 |     pub fn tokens_per_second(&self) -> Option<f64> {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: field `realtime_enabled` is never read
+  --> vscode-latency-monitor-rs/src/dashboard.rs:20:5
+   |
+17 | pub struct DashboardServer {
+   |            --------------- field in this struct
+...
+20 |     realtime_enabled: bool,
+   |     ^^^^^^^^^^^^^^^^
+
+warning: field `config` is never read
+  --> vscode-latency-monitor-rs/src/dashboard.rs:26:5
+   |
+24 | struct AppState {
+   |        -------- field in this struct
+25 |     storage: MetricsStorage,
+26 |     config: Config,
+   |     ^^^^^^
+   |
+   = note: `AppState` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: method `cleanup_old_events` is never used
+   --> vscode-latency-monitor-rs/src/storage.rs:312:18
+    |
+ 14 | impl MetricsStorage {
+    | ------------------- method in this implementation
+...
+312 |     pub async fn cleanup_old_events(&self, retention_days: u32) -> Result<()> {
+    |                  ^^^^^^^^^^^^^^^^^^
+
+warning: method `validate` is never used
+   --> vscode-latency-monitor-rs/src/config.rs:117:12
+    |
+ 84 | impl Config {
+    | ----------- method in this implementation
+...
+117 |     pub fn validate(&self) -> Result<()> {
+    |            ^^^^^^^^
+
+warning: field `config` is never read
+  --> vscode-latency-monitor-rs/src/telemetry.rs:28:5
+   |
+26 | struct TelemetryState {
+   |        -------------- field in this struct
+27 |     storage: MetricsStorage,
+28 |     config: Config,
+   |     ^^^^^^
+   |
+   = note: `TelemetryState` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: `vscode-latency-monitor` (bin "vscode-latency-monitor") generated 17 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running `/home/jeb/programs/target/debug/vscode-latency-monitor telemetry --port 8080 --verbose`
+[2m2025-10-15T03:10:47.157747Z[0m [32m INFO[0m ThreadId(01) VS Code Latency Monitor starting...
+[2m2025-10-15T03:10:47.158291Z[0m [32m INFO[0m ThreadId(01) 🛰️ Starting LAN telemetry server on port 8080
+[2m2025-10-15T03:10:47.159879Z[0m [32m INFO[0m ThreadId(01) Metrics storage initialized at: /home/jeb/.local/share/vscode-latency-monitor/metrics.db
+[2m2025-10-15T03:10:47.160906Z[0m [32m INFO[0m ThreadId(01) Detected LAN IP: 192.168.1.143
+[2m2025-10-15T03:10:47.160920Z[0m [32m INFO[0m ThreadId(01) Verbose telemetry logging enabled
+[2m2025-10-15T03:10:47.160924Z[0m [32m INFO[0m ThreadId(01) 🌐 Telemetry server will be accessible across your LAN
+[2m2025-10-15T03:10:47.161106Z[0m [32m INFO[0m ThreadId(01) 🌐 Starting telemetry server on LAN: http://192.168.1.143:8080
+[2m2025-10-15T03:10:47.161119Z[0m [32m INFO[0m ThreadId(01) 📊 Telemetry endpoints available at:
+[2m2025-10-15T03:10:47.161124Z[0m [32m INFO[0m ThreadId(01)   - Main: http://192.168.1.143:8080/
+[2m2025-10-15T03:10:47.161129Z[0m [32m INFO[0m ThreadId(01)   - API: http://192.168.1.143:8080/api/telemetry
+[2m2025-10-15T03:10:47.161133Z[0m [32m INFO[0m ThreadId(01)   - Raw Metrics: http://192.168.1.143:8080/api/metrics/raw
+Error: Address already in use (os error 98)
